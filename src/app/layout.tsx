@@ -2,15 +2,7 @@ import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils"
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  RedirectToSignIn,
-  SignIn
-} from '@clerk/nextjs'
+import { Toaster } from "@/components/ui/toaster"
 import Sidebar from "@/components/sidebar";
 import { User } from "lucide-react";
 
@@ -27,31 +19,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            raleway.className
-          )}
-        >
-          <SignedOut>
-            <RedirectToSignIn />
+    <html lang="en">
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          raleway.className
+        )}
+      >
+        <div className="flex w-full min-h-screen">
+          <Sidebar />
+          <div className="flex flex-col w-full min-h-screen">
+            <header className="flex items-center p-4 justify-end">
+            </header>
             {children}
-          </SignedOut>
-          <SignedIn>
-            <div className="flex w-full min-h-screen">
-              <Sidebar/>
-              <div className="flex flex-col w-full min-h-screen">
-                <header className="flex items-center p-4 justify-end">
-                  <UserButton />
-                </header>
-                {children}
-              </div>
-            </div>
-          </SignedIn>
-        </body>
-      </html>
-    </ClerkProvider>
+          </div>
+        </div>
+        <Toaster />
+      </body>
+    </html>
   );
 }
