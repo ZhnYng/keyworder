@@ -24,22 +24,20 @@ export default function SearchBar(
       params.delete('query');
     }
     replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  }, 100);
 
   return (
-    <form className="flex flex-1 flex-col">
-      <div className="relative">
-        <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder={placeholder || "Search"}
-          className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3"
-          onChange={(e) => {
-            handleSearch(e.target.value);
-          }}
-          defaultValue={searchParams.get('query')?.toString()}
-        />
-      </div>
-    </form>
+    <div className="relative flex flex-1 flex-col">
+      <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+      <Input
+        type="search"
+        placeholder={placeholder || "Search"}
+        className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3"
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+        defaultValue={searchParams.get('query')?.toString()}
+      />
+    </div>
   );
 }

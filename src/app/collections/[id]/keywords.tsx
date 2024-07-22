@@ -3,26 +3,22 @@ import React, { useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { addKeyword, deleteKeyword } from "./actions";
 import { Button } from "@/components/ui/button";
-import { XIcon } from "lucide-react";
+import { Loader2, XIcon } from "lucide-react";
 import { useFormState } from "react-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/database.types";
 
+type Keyword = Database["public"]["Tables"]["keywords"]["Row"];
+
 export default function Keywords({ imageId, keywords }: {
   imageId: number;
-  keywords: {
-    created_at: string;
-    id: number;
-    image_id: number;
-    keyword: string;
-    user_id: string;
-  }[] | null;
+  keywords: Keyword[] | null;
 }) {
-  const initialState = { errors: {} };
   const [optimisticKeywords, setOptimisticKeywords] = React.useOptimistic(keywords);
   const { toast } = useToast();
   const addKeywordBinded = addKeyword.bind(null, imageId);
-  const [state, action] = useFormState(addKeywordBinded, initialState);
+  const [state, action] = useFormState(addKeywordBinded, { errors: {} });
+  const [isPending, startTransition] = React.useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -38,7 +34,7 @@ export default function Keywords({ imageId, keywords }: {
   }, [state.errors]);
 
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="flex flex-wrap gap-2 mt-2 items-center">
       {optimisticKeywords &&
         optimisticKeywords.map((keyword) => (
           <div className="bg-muted text-muted-foreground rounded-md text-xs flex items-center px-1" key={keyword.id}>
@@ -48,7 +44,7 @@ export default function Keywords({ imageId, keywords }: {
               action={
                 async (formData: FormData) => {
                   setOptimisticKeywords(optimisticKeywords.filter((k) => k.id !== keyword.id));
-                  deleteKeyword(formData);
+                  startTransition(() => deleteKeyword(formData));
                 }
               }
             >
@@ -74,7 +70,7 @@ export default function Keywords({ imageId, keywords }: {
               ...optimisticKeywords!,
               {
                 created_at: "",
-                id: 1,
+                id: optimisticKeywords!.length + 1,
                 image_id: imageId,
                 keyword: keyword,
                 user_id: ""
@@ -83,7 +79,7 @@ export default function Keywords({ imageId, keywords }: {
             if (inputRef.current) {
               inputRef.current.value = '';
             }
-            action(formData);
+            startTransition(() => action(formData));
           }
         }
       >
@@ -95,6 +91,7 @@ export default function Keywords({ imageId, keywords }: {
           className="bg-transparent focus:outline-none text-xs px-2 py-1 h-6 w-24"
         />
       </form>
+      {isPending && <Loader2 className="animate-spin size-5"/>}
     </div>
   );
 }

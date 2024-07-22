@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { createClient } from "@/utils/supabase/server"
-import ImageCard from "./image-card"
+import ImageCard from "./images"
 
 export default async function Page(
   {
@@ -28,10 +28,22 @@ export default async function Page(
   }
 ) {
   const supabase = createClient()
+
+  const { data: collection, error: getCollectionError } = await supabase
+    .from("collections")
+    .select()
+    .eq("id", params.id)
+    .limit(1)
+    .single()
+  if (getCollectionError) {
+    console.error(getCollectionError)
+  }
+
   let { data: images, error } = await supabase
     .from("images")
     .select()
     .eq("collection_id", params.id)
+    .order("id")
   if (error) {
     console.error(error)
   }
@@ -43,7 +55,7 @@ export default async function Page(
     <div className="flex min-h-screen w-full">
       <div className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold">{params.id}</h1>
+          <h1 className="text-3xl font-bold">{collection ? collection.name : 'NIL'}</h1>
           <div className="flex items-center mt-4 w-full gap-2">
             <SearchBar placeholder="Search photos..." />
             <Select>

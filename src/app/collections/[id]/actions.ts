@@ -8,6 +8,8 @@ export type State = {
   errors?: {
     keyword?: string[];
     id?: string[];
+    title?: string[];
+    description?: string[];
   } | null;
 };
 
@@ -48,9 +50,29 @@ export async function addKeyword(imageId: number, prevState: State, formData: Fo
 }
 
 export async function deleteKeyword(formData: FormData) {
-  const DeleteKeywordSchema = FormSchema.omit({ keyword: true })
-  const validatedFields = DeleteKeywordSchema.safeParse({
-    id: formData.get('id'),
+  // mutate data
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('keywords')
+    .delete()
+    .eq('id', formData.get("id")?.toString()!)
+  if (error) {
+    console.log(error)
+  }
+
+  // revalidate cache
+  revalidatePath('/collections/[id]', "page");
+}
+
+const UpdateImageSchema = z.object({
+  title: z.string().min(10),
+  description: z.string().min(20),
+})
+
+export async function updateImage(imageId: number, prevState: State, formData: FormData) {
+  const validatedFields = UpdateImageSchema.safeParse({
+    title: formData.get('title'),
+    description: formData.get('description'),
   })
  
   // Return early if the form data is invalid
@@ -64,13 +86,17 @@ export async function deleteKeyword(formData: FormData) {
   // mutate data
   const supabase = createClient()
   const { error } = await supabase
-    .from('keywords')
-    .delete()
-    .eq('id', validatedFields.data.id)
+    .from('images')
+    .update({ 
+      title: validatedFields.data.title,
+      description: validatedFields.data.description
+    })
+    .eq('id', imageId)
   if (error) {
     console.log(error)
   }
 
   // revalidate cache
   revalidatePath('/collections/[id]', "page");
+  return { errors: null }
 }
