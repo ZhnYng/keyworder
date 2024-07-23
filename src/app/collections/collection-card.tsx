@@ -4,23 +4,19 @@ import { Database } from "@/database.types";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import React from "react";
-import { Calendar, Image } from "lucide-react";
+import { Calendar, LucideImage } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
 import { redirect } from "next/navigation";
+
+type Collection = Database["public"]["Tables"]["collections"]["Row"];
 
 export default async function CollectionCard(
   {
     collection
   }: {
-    collection: {
-      createdat: string;
-      email: string;
-      folder: string;
-      id: number;
-      name: string;
-      status: Database["public"]["Enums"]["collection_status"];
-    }
+    collection: Collection;
   }
 ) {
   const supabase = createClient()
@@ -65,7 +61,7 @@ export default async function CollectionCard(
       <CardContent>
         <div className="grid grid-cols-3 gap-2">
           {collectionImageUrls && collectionImageUrls?.map((url, index) => (
-            <img
+            <Image
               key={url.path}
               src={url.signedUrl}
               width={400}
@@ -74,13 +70,21 @@ export default async function CollectionCard(
               className="aspect-square rounded-md object-cover"
             />
           ))}
+          {Array.from({ length: (6 - collectionImageUrls?.length!) }).map((_, index) => (
+            <LucideImage 
+              key={index} 
+              className="text-muted-foreground w-full" 
+              size={70}
+              strokeWidth={1} 
+            />
+          ))}
         </div>
       </CardContent>
       <CardFooter>
         <div className="flex flex-col w-full gap-4">
           <div className="grid grid-cols-2">
             <div className="text-sm text-muted-foreground flex items-center gap-1">
-              <Image /> {collectionImageUrls ? collectionImageUrls.length : 0} images
+              <LucideImage /> {collectionImageUrls ? collectionImageUrls.length : 0} images
             </div>
             <div className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar /> {format(collection.createdat, 'dd/MM/yyyy')}

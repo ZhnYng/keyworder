@@ -3,6 +3,7 @@ import SearchBar from "@/components/custom/search-bar";
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from "next/navigation";
 import CollectionCard from "./collection-card";
+import CreateCollectionCard from "./create-collection-card";
 
 export default async function Page({
   searchParams,
@@ -41,6 +42,7 @@ export default async function Page({
             {filteredCollections.map((collection) => (
               <CollectionCard collection={collection} key={collection.id}/>
             ))}
+            <CreateCollectionCard />
           </div>
         </main>
       </div>

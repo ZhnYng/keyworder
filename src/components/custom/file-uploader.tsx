@@ -11,15 +11,20 @@ import { CloudUpload } from 'lucide-react';
 import Image from 'next/image';
 import { DropzoneOptions } from "react-dropzone";
 
-export default function FileUploaderComponent({dropzone}: {dropzone: DropzoneOptions}) {
-  const [files, setFiles] = React.useState<File[] | null>(null);
-
+export default function FileUploaderComponent(
+  { dropzone, files, setFiles }: 
+  { 
+    dropzone: DropzoneOptions, 
+    files: File[] | null, 
+    setFiles: React.Dispatch<React.SetStateAction<File[] | null>> 
+  }
+) {
   return (
     <FileUploader
       value={files}
       onValueChange={setFiles}
       dropzoneOptions={dropzone}
-      className="relative bg-background rounded-lg p-2 space-y-10"
+      className="relative bg-background rounded-lg p-2 space-y-2"
     >
       <FileInput className="outline-dashed outline-1 outline-black p-6">
         <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
@@ -29,11 +34,11 @@ export default function FileUploaderComponent({dropzone}: {dropzone: DropzoneOpt
             &nbsp; or drag and drop
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            SVG, PNG, JPG or GIF
+            PNG, JPG or JPEG
           </p>
         </div>
       </FileInput>
-      <FileUploaderContent className="grid grid-cols-3 sm:grid-cols-5 gap-4 justify-items-center">
+      <FileUploaderContent className="grid grid-cols-3 sm:grid-cols-7 w-full justify-items-center gap-4">
         {files?.map((file, i) => (
           <FileUploaderItem
             key={i}
