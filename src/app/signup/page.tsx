@@ -6,13 +6,13 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2, WholeWord } from "lucide-react"
-import { login } from "./actions"
 import React from "react"
+import { signup } from "./actions"
 import { useFormState } from "react-dom"
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
-  const [state, action] = useFormState(login, { errors: {} })
+  const [state, action] = useFormState(signup, { errors: {} })
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background">
@@ -24,8 +24,8 @@ export default function Page() {
       </header>
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Enter your email and password to sign in to your account.</CardDescription>
+          <CardTitle className="text-2xl">Welcome!</CardTitle>
+          <CardDescription>Enter your email and password to sign up.</CardDescription>
         </CardHeader>
         <form action={
           async (formData: FormData) => {
@@ -41,9 +41,6 @@ export default function Page() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="/reset-password" className="text-xs text-muted-foreground hover:underline" prefetch={false}>
-                  Forgot password?
-                </Link>
               </div>
               <Input id="password" name="password" type="password" required />
               {state.errors?.password && <div className="text-sm text-red-500">{state.errors.password.join(", ")}</div>}
@@ -51,15 +48,15 @@ export default function Page() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              {isPending ? <Loader2 className="animate-spin"/> : "Sign in"}
+              {isPending ? <Loader2 className="animate-spin"/> : "Register"}
             </Button>
           </CardFooter>
         </form>
       </Card>
       <div className="mt-4 text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="font-medium underline" prefetch={false}>
-          Register
+        Already have an account?{" "}
+        <Link href="/login" className="font-medium underline" prefetch={false}>
+          Login
         </Link>
       </div>
     </div>

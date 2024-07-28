@@ -4,7 +4,7 @@ import { Database } from "@/database.types";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import React from "react";
-import { Calendar, LucideImage } from "lucide-react";
+import { Calendar, LucideImage, PlusSquare } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
@@ -103,7 +103,7 @@ export default async function CollectionCard(
             />
           ))}
           {Array.from({ length: (6 - collectionImageUrls?.length!) }).map((_, index) => (
-            <LucideImage
+            <PlusSquare
               key={index}
               className="text-zinc-200 w-full"
               size={70}
@@ -114,7 +114,7 @@ export default async function CollectionCard(
       </CardContent>
       <CardFooter>
         <div className="flex flex-col w-full gap-4">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 justify-items-center">
             <div className="text-sm text-muted-foreground flex items-center gap-1">
               <LucideImage /> {collectionImageUrls ? collectionImageUrls.length : 0} {collectionImageUrls?.length == 1 ? <>image</> : <>images</>}
             </div>
