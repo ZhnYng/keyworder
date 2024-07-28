@@ -25,6 +25,38 @@ export default async function CollectionCard(
     redirect('/login')
   }
 
+  // The following code to update status is not the best
+  // We are still waiting for notification support in Trigger
+  const { data: runsData, error: runsError } = await supabase
+    .from("runs")
+    .select()
+    .eq("collection_id", collection.id)
+  if (runsError) {
+    console.error(runsError);
+  } else {
+    if (runsData.length! > 0) {
+      let allCompleted = true;
+      for (const runData of runsData!) {
+        if (runData.status !== "COMPLETED") {
+          allCompleted = false;
+          break;
+        }
+      }
+
+      if (allCompleted) {
+        const { error } = await supabase
+          .from('collections')
+          .update({
+            status: "completed"
+          })
+          .eq("id", collection.id)
+        if (error) {
+          console.error(error);
+        }
+      }
+    }
+  }
+
   const { data: collectionImages, error: listFolderError } = await supabase
     .storage
     .from('stock_images')
@@ -47,14 +79,14 @@ export default async function CollectionCard(
   return (
     <Card>
       <CardHeader className="space-y-2">
-        <CardTitle>{collection.name}</CardTitle>
+        <CardTitle className="truncate text py-1">{collection.name}</CardTitle>
         <div>
           {collection.status === "failed" ? (
-            <Badge variant="destructive">{collection.status}</Badge>
+            <Badge className="capitalize" variant="destructive">{collection.status}</Badge>
           ) : collection.status === "completed" ? (
-            <Badge variant="success" className="capitalize">{collection.status}</Badge>
+            <Badge className="capitalize" variant="success">{collection.status}</Badge>
           ) : (
-            <Badge variant="secondary">{collection.status}</Badge>
+            <Badge className="capitalize" variant="secondary">{collection.status}</Badge>
           )}
         </div>
       </CardHeader>
@@ -71,11 +103,11 @@ export default async function CollectionCard(
             />
           ))}
           {Array.from({ length: (6 - collectionImageUrls?.length!) }).map((_, index) => (
-            <LucideImage 
-              key={index} 
-              className="text-muted-foreground w-full" 
+            <LucideImage
+              key={index}
+              className="text-zinc-200 w-full"
               size={70}
-              strokeWidth={1} 
+              strokeWidth={1}
             />
           ))}
         </div>
@@ -84,7 +116,7 @@ export default async function CollectionCard(
         <div className="flex flex-col w-full gap-4">
           <div className="grid grid-cols-2">
             <div className="text-sm text-muted-foreground flex items-center gap-1">
-              <LucideImage /> {collectionImageUrls ? collectionImageUrls.length : 0} images
+              <LucideImage /> {collectionImageUrls ? collectionImageUrls.length : 0} {collectionImageUrls?.length == 1 ? <>image</> : <>images</>}
             </div>
             <div className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar /> {format(collection.createdat, 'dd/MM/yyyy')}

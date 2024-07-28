@@ -17,6 +17,7 @@ export type Database = {
           id: number
           name: string
           status: Database["public"]["Enums"]["collection_status"]
+          user_id: string
         }
         Insert: {
           createdat?: string
@@ -25,6 +26,7 @@ export type Database = {
           id?: number
           name: string
           status: Database["public"]["Enums"]["collection_status"]
+          user_id: string
         }
         Update: {
           createdat?: string
@@ -33,8 +35,17 @@ export type Database = {
           id?: number
           name?: string
           status?: Database["public"]["Enums"]["collection_status"]
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "collections_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       images: {
         Row: {
@@ -43,6 +54,7 @@ export type Database = {
           file_name: string
           id: number
           title: string
+          user_id: string
         }
         Insert: {
           collection_id: number
@@ -50,6 +62,7 @@ export type Database = {
           file_name: string
           id?: number
           title: string
+          user_id: string
         }
         Update: {
           collection_id?: number
@@ -57,6 +70,7 @@ export type Database = {
           file_name?: string
           id?: number
           title?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -64,6 +78,13 @@ export type Database = {
             columns: ["collection_id"]
             isOneToOne: false
             referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "images_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -107,12 +128,63 @@ export type Database = {
           },
         ]
       }
+      runs: {
+        Row: {
+          collection_id: number
+          created_at: string
+          file_name: string
+          id: number
+          rerun_attempt: number | null
+          run_id: string
+          status: string | null
+        }
+        Insert: {
+          collection_id: number
+          created_at?: string
+          file_name: string
+          id?: number
+          rerun_attempt?: number | null
+          run_id: string
+          status?: string | null
+        }
+        Update: {
+          collection_id?: number
+          created_at?: string
+          file_name?: string
+          id?: number
+          rerun_attempt?: number | null
+          run_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "runs_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_latest_runs_in_collection: {
+        Args: {
+          p_collection_id: number
+        }
+        Returns: {
+          collection_id: number
+          file_name: string
+          id: number
+          run_id: string
+          status: string
+          rerun_attempt: number
+          created_at: string
+        }[]
+      }
     }
     Enums: {
       collection_status: "completed" | "failed" | "pending"

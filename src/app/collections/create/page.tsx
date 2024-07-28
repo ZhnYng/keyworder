@@ -27,6 +27,11 @@ const formSchema = z.object({
 })
 
 export default function Page() {
+  const [isPending, startTransition] = React.useTransition(); // Essential to put useTransition on top
+  const [files, setFiles] = React.useState<File[] | null>(null);
+  const [state, action] = useFormState(createCollection, { errors: {} })
+  const uploadMessageRef = React.useRef<HTMLParagraphElement>(null);
+
   const supabase = createClient()
 
   React.useEffect(() => {
@@ -45,11 +50,6 @@ export default function Page() {
       collectionName: "",
     },
   })
-
-  const [files, setFiles] = React.useState<File[] | null>(null);
-  const uploadMessageRef = React.useRef<HTMLParagraphElement>(null);
-  const [state, action] = useFormState(createCollection, { errors: {} })
-  const [isPending, startTransition] = React.useTransition();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!files) {

@@ -1,5 +1,6 @@
 "use server";
 
+import { generateMetadata } from "@/trigger/generate";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -33,14 +34,16 @@ export async function createCollection(prevState: State, formData: FormData) {
   const collectionName = validatedFields.data.collectionName
   const images = validatedFields.data.images
 
-  // upload images to cloud storage
   const supabase = createClient()
   const user = (await supabase.auth.getUser()).data.user
   if (!user) {
     redirect("/login")
   }
+  
+  const uploadedPaths:string[] = [] // array to store all uploaded image paths
 
-  for (const image of validatedFields.data.images) {
+  // upload images to cloud storage
+  await Promise.all(images.map(async (image) => {
     const { data, error: imageUploadError } = await supabase
       .storage
       .from('stock_images')
@@ -49,30 +52,74 @@ export async function createCollection(prevState: State, formData: FormData) {
         cacheControl: '3600',
         upsert: false
       })
+    
     if (imageUploadError) {
       switch (imageUploadError.message) {
         case 'The resource already exists':
           return { errors: { images: ["One or more images already exist in this collection."] }}
         default:
-          return { errors: { images: ["Error uploading image, try again later."] }}
+          return { errors: { images: ["Error uploading images, try again later."] }}
       }
     }
-  }
-  
-  const { error: createCollectionsError } = await supabase
+
+    uploadedPaths.push(data.path)
+  }));
+
+  // create collection record in database
+  const { data: newCollectionRow, error: createCollectionsError } = await supabase
     .from('collections')
     .insert({
       name: collectionName,
       email: user.email!,
       folder: collectionName,
-      status: 'pending'
+      status: 'pending',
+      user_id: user.id
     })
+    .select()
+    .single()
   if (createCollectionsError) {
     console.error(createCollectionsError)
     return { errors: { collectionName: ["Error creating collection, try again later."] }}
   }
+
+  // generate metadata for each image
+  generateImageMetadata(uploadedPaths, newCollectionRow.id)
   
   // revalidate cache
   revalidatePath('/collections', "page");
   redirect("/collections")
+}
+
+export async function generateImageMetadata(imagePaths: string[], collectionId: number) {
+  const supabase = createClient();
+
+  // trigger run to generate title, description, keywords for each image
+  await Promise.all(imagePaths.map(async (path) => {
+    // create signed url for image
+    const { data: imageUrl, error: createSignedUrlsError } = await supabase
+      .storage
+      .from('stock_images')
+      .createSignedUrl(path, 604800);
+    if (createSignedUrlsError) {
+      console.error(createSignedUrlsError);
+    }
+    
+    // trigger generateMetadata function on trigger.dev
+    const handle = await generateMetadata.trigger({
+      imageUrl: imageUrl?.signedUrl!,
+      fileName: path.split('/').pop()!
+    });
+
+    // store runId in db
+    const { error: insertRunError } = await supabase
+      .from('runs')
+      .insert({
+        collection_id: collectionId,
+        file_name: path.split('/').pop()!,
+        run_id: handle.id
+      });
+    if (insertRunError) {
+      console.error(insertRunError);
+    }
+  }));
 }

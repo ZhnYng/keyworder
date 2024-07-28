@@ -14,11 +14,11 @@ export default function Keywords({ imageId, keywords }: {
   imageId: number;
   keywords: Keyword[] | null;
 }) {
+  const [isPending, startTransition] = React.useTransition();
   const [optimisticKeywords, setOptimisticKeywords] = React.useOptimistic(keywords);
   const { toast } = useToast();
   const addKeywordBinded = addKeyword.bind(null, imageId);
   const [state, action] = useFormState(addKeywordBinded, { errors: {} });
-  const [isPending, startTransition] = React.useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

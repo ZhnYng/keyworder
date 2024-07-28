@@ -16,7 +16,7 @@ export default function CreateCollectionCard() {
       <CardContent className="flex justify-center items-center">
         <div className="grid grid-cols-3 w-full">
           {Array.from({ length: 6 }).map((_, index) => (
-            <LucideImage key={index} className="text-muted-foreground w-full" size={70} strokeWidth={1}/>
+            <LucideImage key={index} className="text-zinc-200 w-full" size={70} strokeWidth={1}/>
           ))}
         </div>
       </CardContent>

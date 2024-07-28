@@ -13,13 +13,7 @@ export default async function ImageCard(
   {
     image,
   }: {
-    image: {
-      collection_id: number;
-      description: string;
-      file_name: string;
-      id: number;
-      title: string;
-    }
+    image: Database['public']['Tables']['images']['Row']
   }
 ) {
   const supabase = createClient()

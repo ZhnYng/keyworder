@@ -22,13 +22,13 @@ export default async function Page({
     .from('collections')
     .select()
     .eq('email', userData.user.email!)
+    .order('createdat', { ascending: false })
   if (getCollectionsError) {
     console.log(getCollectionsError);
   }
-  collections = collections ?? []
 
   const query = searchParams?.query || '';
-  const filteredCollections = collections.filter((collection) =>
+  const filteredCollections = collections!.filter((collection) =>
     collection.name.toLowerCase().includes(query.toLowerCase())
   );
 

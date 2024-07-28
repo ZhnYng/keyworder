@@ -23,10 +23,10 @@ export default function ImageCard(
     keywords: Database['public']['Tables']['keywords']['Row'][] | null
   }
 ) {
+  const [isPending, startTransition] = React.useTransition();
   const [editing, setEditing] = React.useState(false)
   const updateImageBinded = updateImage.bind(null, image.id)
   const [state, action] = useFormState(updateImageBinded, { errors: {} })
-  const [isPending, startTransition] = React.useTransition();
 
   React.useEffect(() => {
     if (!state.errors) {
