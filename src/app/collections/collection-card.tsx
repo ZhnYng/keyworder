@@ -4,11 +4,12 @@ import { Database } from "@/database.types";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import React from "react";
-import { Calendar, LucideImage, PlusSquare } from "lucide-react";
+import { Calendar, LucideImage, PlusSquare, Trash, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
 import { redirect } from "next/navigation";
+import DeleteCollectionBtn from "./delete-collection-button";
 
 type Collection = Database["public"]["Tables"]["collections"]["Row"];
 
@@ -122,11 +123,14 @@ export default async function CollectionCard(
               <Calendar /> {format(collection.createdat, 'dd/MM/yyyy')}
             </div>
           </div>
-          <Link href={`/collections/${collection.id}`} prefetch={false} className="self-end">
-            <Button size="sm" variant="outline">
-              View Details
-            </Button>
-          </Link>
+          <div className="flex gap-2 self-end">
+            <Link href={`/collections/${collection.id}`} prefetch={false}>
+              <Button size="sm" variant="outline">
+                View Details
+              </Button>
+            </Link>
+            <DeleteCollectionBtn collection={collection}/>
+          </div>
         </div>
       </CardFooter>
     </Card>

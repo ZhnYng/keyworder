@@ -39,6 +39,20 @@ export async function createCollection(prevState: State, formData: FormData) {
   if (!user) {
     redirect("/login")
   }
+
+  const { data: customer, error: getCustomerError } = await supabase
+    .from("customers")
+    .select()
+    .eq("user_id", user.id)
+    .maybeSingle()
+  if (getCustomerError) {
+    console.error(getCustomerError)
+    return { errors: { collectionName: ["Error creating collection, try again later."] }}
+  }
+
+  if (!customer || customer.subscription_status === "INCOMPLETE") {
+    return { errors: { images: ["Valid payment method required."] }}
+  }
   
   const uploadedPaths:string[] = [] // array to store all uploaded image paths
 
@@ -83,14 +97,14 @@ export async function createCollection(prevState: State, formData: FormData) {
   }
 
   // generate metadata for each image
-  generateImageMetadata(uploadedPaths, newCollectionRow.id)
+  generateImageMetadata(uploadedPaths, newCollectionRow.id, customer.stripe_customer_id)
   
   // revalidate cache
   revalidatePath('/collections', "page");
   redirect("/collections")
 }
 
-export async function generateImageMetadata(imagePaths: string[], collectionId: number) {
+export async function generateImageMetadata(imagePaths: string[], collectionId: number, stripe_customer_id: string) {
   const supabase = createClient();
 
   // trigger run to generate title, description, keywords for each image
@@ -107,7 +121,8 @@ export async function generateImageMetadata(imagePaths: string[], collectionId: 
     // trigger generateMetadata function on trigger.dev
     const handle = await generateMetadata.trigger({
       imageUrl: imageUrl?.signedUrl!,
-      fileName: path.split('/').pop()!
+      fileName: path.split('/').pop()!,
+      stripe_customer_id: stripe_customer_id
     });
 
     // store runId in db

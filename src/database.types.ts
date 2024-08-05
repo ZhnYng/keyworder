@@ -47,8 +47,50 @@ export type Database = {
           },
         ]
       }
+      customers: {
+        Row: {
+          created_at: string
+          id: number
+          stripe_customer_id: string
+          stripe_subscription_id: string | null
+          subscription_status:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          stripe_customer_id: string
+          stripe_subscription_id?: string | null
+          subscription_status?:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          stripe_customer_id?: string
+          stripe_subscription_id?: string | null
+          subscription_status?:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       images: {
         Row: {
+          adobe_stock_category: number | null
           collection_id: number
           description: string
           file_name: string
@@ -57,6 +99,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          adobe_stock_category?: number | null
           collection_id: number
           description: string
           file_name: string
@@ -65,6 +108,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          adobe_stock_category?: number | null
           collection_id?: number
           description?: string
           file_name?: string
@@ -185,9 +229,24 @@ export type Database = {
           created_at: string
         }[]
       }
+      get_latest_runs_with_window_function: {
+        Args: {
+          p_collection_id: number
+        }
+        Returns: {
+          collection_id: number
+          file_name: string
+          id: number
+          run_id: string
+          status: string
+          rerun_attempt: number
+          created_at: string
+        }[]
+      }
     }
     Enums: {
       collection_status: "completed" | "failed" | "pending"
+      subscription_status: "INCOMPLETE" | "COMPLETED"
     }
     CompositeTypes: {
       [_ in never]: never

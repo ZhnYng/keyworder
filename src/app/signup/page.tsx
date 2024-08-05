@@ -15,7 +15,7 @@ export default function Page() {
   const [state, action] = useFormState(signup, { errors: {} })
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="flex h-full flex-col items-center justify-center bg-background">
       <header className="mb-8 flex w-full max-w-md items-center justify-center">
         <Link href="#" prefetch={false}>
           <WholeWord className="h-8 w-8" />

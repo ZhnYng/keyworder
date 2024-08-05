@@ -9,13 +9,14 @@ import { Loader2, WholeWord } from "lucide-react"
 import { login } from "./actions"
 import React from "react"
 import { useFormState } from "react-dom"
+import { createClient } from "@/utils/supabase/client"
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
   const [state, action] = useFormState(login, { errors: {} })
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="flex h-full flex-col items-center justify-center bg-background">
       <header className="mb-8 flex w-full max-w-md items-center justify-center">
         <Link href="#" prefetch={false}>
           <WholeWord className="h-8 w-8" />

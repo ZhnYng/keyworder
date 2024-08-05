@@ -34,9 +34,9 @@ export default async function RootLayout({
           {user && <div className="w-64">
             <Sidebar />
           </div>}
-          <div className="flex flex-col w-full min-h-screen">
-            {/* <header className="flex items-center p-4 justify-end">
-            </header> */}
+          <div className="flex flex-col w-full min-h-screen flex-1">
+            <header className="flex items-center p-4 justify-end">
+            </header>
             {children}
           </div>
         </div>
