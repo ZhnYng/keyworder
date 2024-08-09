@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster"
 import Sidebar from "@/components/sidebar";
 import { User } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -42,6 +43,7 @@ export default async function RootLayout({
         </div>
         <Toaster />
       </body>
+      <SpeedInsights/>
     </html>
   );
 }
