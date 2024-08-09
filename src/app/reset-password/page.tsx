@@ -37,7 +37,7 @@ export default function Page() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Password Reset</CardTitle>
-          <CardDescription>Enter your account email.</CardDescription>
+          <CardDescription>Enter your account email address.</CardDescription>
         </CardHeader>
         <form action={
           async (formData: FormData) => {
@@ -53,7 +53,7 @@ export default function Page() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              {isPending ? <Loader2 className="animate-spin" /> : "Sign in"}
+              {isPending ? <Loader2 className="animate-spin" /> : "Send reset email"}
             </Button>
           </CardFooter>
         </form>

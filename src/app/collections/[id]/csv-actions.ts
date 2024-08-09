@@ -37,7 +37,7 @@ export async function create_adobe_stock_csv(collection: Collection) {
   const headers = ["Filename", "Title", "Keywords", "Category", "Releases"];
   const csvStream = fastcsv.format({ headers });
 
-  const filePath = `${uuidv4()}_adobe_stock_csv.csv`;
+  const filePath = `/tmp/${uuidv4()}_adobe_stock_csv.csv`;
   const writableStream = fs.createWriteStream(filePath);
 
   writableStream.on('finish', async () => {

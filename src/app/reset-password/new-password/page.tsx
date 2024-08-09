@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, WholeWord } from "lucide-react";
 import { z } from "zod";
 import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
+import { redirect } from "next/navigation";
 
 const passwordSchema = z.object({
   password: z.string().min(8),
@@ -35,16 +37,22 @@ export default function Page() {
       const { data, error } = await supabase.auth
         .updateUser({ password: validatedFields.data.password })
 
-      console.log(data)
-      console.error(error)
-
-      if (data) alert("Password updated successfully!")
-      if (error) alert("There was an error updating your password.")
+      if (error) {
+        toast({
+          title: "There was an error updating your password."
+        })
+      } else {
+        toast({
+          title: "Password updated",
+          description: "You can now log in with your new password."
+        })
+        redirect("/")
+      }
     })
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="flex h-full flex-col items-center justify-center bg-background">
       <header className="mb-8 flex w-full max-w-md items-center justify-center">
         <Link href="#" prefetch={false}>
           <WholeWord className="h-8 w-8" />
@@ -54,7 +62,7 @@ export default function Page() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Password Reset</CardTitle>
-          <CardDescription>Enter your account email.</CardDescription>
+          <CardDescription>Enter your new password.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -67,7 +75,7 @@ export default function Page() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              {isPending ? <Loader2 className="animate-spin" /> : "Reset Password"}
+              {isPending ? <Loader2 className="animate-spin" /> : "Reset password"}
             </Button>
           </CardFooter>
         </form>
