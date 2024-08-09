@@ -33,8 +33,10 @@ export async function sendPasswordResetEmail(prevState: State, formData: FormDat
 
   if (error) {
     console.error(error)
+  } else {
+    return { errors: null }
   }
+  
   console.log(data)
-
   return {}
 }

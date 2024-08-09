@@ -43,9 +43,9 @@ export default async function RootLayout({
           </div>
         </div>
         <Toaster />
+        <SpeedInsights/>
+        <Analytics/>
       </body>
-      <SpeedInsights/>
-      <Analytics/>
     </html>
   );
 }
