@@ -83,17 +83,17 @@ export default function Page() {
                     The name of your collection.
                   </FormDescription>
                   <FormMessage />
+                  <div id="title-error" aria-live="polite" aria-atomic="true">
+                    {state.errors?.collectionName &&
+                      state.errors.collectionName.map((error: string) => (
+                        <p className="mt-2 text-sm font-medium text-red-500" key={error}>
+                          {error}
+                        </p>
+                      ))}
+                  </div>
                 </FormItem>
               )}
             />
-            <div id="title-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.collectionName &&
-                state.errors.collectionName.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
             <div>
               <FormLabel>Your Images</FormLabel>
               <FormDescription>
@@ -125,11 +125,11 @@ export default function Page() {
               </div>
             </div>
             <div className="flex justify-end w-full">
-              {isPending ? 
+              {isPending ?
                 <Button type="submit" disabled className="w-1/6">
-                  <Loader2 className="size-5 animate-spin" /> 
+                  <Loader2 className="size-5 animate-spin" />
                 </Button>
-                : 
+                :
                 <Button type="submit" className="w-1/6">Submit</Button>
               }
             </div>

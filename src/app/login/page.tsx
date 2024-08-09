@@ -18,9 +18,9 @@ export default function Page() {
   return (
     <div className="flex h-full flex-col items-center justify-center bg-background">
       <header className="mb-8 flex w-full max-w-md items-center justify-center">
-        <Link href="#" prefetch={false}>
+        <Link href="#" prefetch={false} className="flex gap-1 items-center">
           <WholeWord className="h-8 w-8" />
-          <span className="sr-only">Keyworder</span>
+          <span className="font-bold text-xl">Keyworder</span>
         </Link>
       </header>
       <Card className="w-full max-w-md">

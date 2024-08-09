@@ -246,7 +246,15 @@ export type Database = {
     }
     Enums: {
       collection_status: "completed" | "failed" | "pending"
-      subscription_status: "INCOMPLETE" | "COMPLETED"
+      subscription_status:
+        | "INCOMPLETE"
+        | "INCOMPLETE_EXPIRED"
+        | "TRAILING"
+        | "ACTIVE"
+        | "PAST_DUE"
+        | "CANCELED"
+        | "UNPAID"
+        | "PAUSED"
     }
     CompositeTypes: {
       [_ in never]: never

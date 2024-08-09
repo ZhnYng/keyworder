@@ -38,7 +38,7 @@ export default async function Page() {
                   We will charge your payment method for each image keyword generation completed. This allows you to truly only pay for what you use.
                 </div>
               </div>
-              {customer?.subscription_status === "COMPLETED" ?
+              {customer?.subscription_status === "ACTIVE" ?
                 <div className="flex space-x-4">
                   <Link href={encodeURI(`https://billing.stripe.com/p/login/test_5kA4iOcgk6fAaU8bII?prefilled_email=${userData.user.email}`)}>
                     <Button variant="default">Manage plan</Button>

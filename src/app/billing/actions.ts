@@ -90,7 +90,8 @@ export async function createSubscription() {
       expand: ["pending_setup_intent"],
       payment_settings: {
         save_default_payment_method: "on_subscription"
-      }
+      },
+      payment_behavior: "default_incomplete",
     });
 
     const { error: updateSubscriptionError } = await supabase

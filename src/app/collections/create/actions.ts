@@ -50,8 +50,29 @@ export async function createCollection(prevState: State, formData: FormData) {
     return { errors: { collectionName: ["Error creating collection, try again later."] }}
   }
 
-  if (!customer || customer.subscription_status === "INCOMPLETE") {
-    return { errors: { images: ["Valid payment method required."] }}
+  if (!customer || customer.subscription_status !== "ACTIVE") {
+    return { errors: { images: ["Payment details required. Visit billing to get started."] }}
+  }
+
+  // create collection record in database
+  const { data: newCollectionRow, error: createCollectionsError } = await supabase
+    .from('collections')
+    .insert({
+      name: collectionName,
+      email: user.email!,
+      folder: collectionName,
+      status: 'pending',
+      user_id: user.id
+    })
+    .select()
+    .single()
+  if (createCollectionsError) {
+    if (createCollectionsError.code === "23505") {
+      return { errors: { collectionName: ["Collection name already exists."] }}
+    } else {
+      console.error(createCollectionsError)
+      return { errors: { collectionName: ["Error creating collection, try again later."] }}
+    }
   }
   
   const uploadedPaths:string[] = [] // array to store all uploaded image paths
@@ -78,23 +99,6 @@ export async function createCollection(prevState: State, formData: FormData) {
 
     uploadedPaths.push(data.path)
   }));
-
-  // create collection record in database
-  const { data: newCollectionRow, error: createCollectionsError } = await supabase
-    .from('collections')
-    .insert({
-      name: collectionName,
-      email: user.email!,
-      folder: collectionName,
-      status: 'pending',
-      user_id: user.id
-    })
-    .select()
-    .single()
-  if (createCollectionsError) {
-    console.error(createCollectionsError)
-    return { errors: { collectionName: ["Error creating collection, try again later."] }}
-  }
 
   // generate metadata for each image
   generateImageMetadata(uploadedPaths, newCollectionRow.id, customer.stripe_customer_id)
