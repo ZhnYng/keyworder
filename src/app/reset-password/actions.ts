@@ -27,7 +27,7 @@ export async function sendPasswordResetEmail(prevState: State, formData: FormDat
   const supabase = createClient()
   const { data, error } = await supabase.auth.resetPasswordForEmail(
     validatedFields.data.email, {
-      redirectTo: `${window.location.origin}/reset-password/new-password`,
+      redirectTo: `${process.env.NEXT_PUBLIC_URL}/reset-password/new-password`,
     }
   )
 
