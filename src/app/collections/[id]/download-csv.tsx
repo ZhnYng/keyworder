@@ -45,7 +45,7 @@ export default function DownloadCSV({ collection }: { collection: Collection }) 
           const response = await create_adobe_stock_csv(collection)
           if (response?.error) {
             toast({
-              title: "Something went wrong! 😢",
+              title: "Something went wrong! Try again.😢",
               variant: "destructive"
             })
             console.error(response.error)
@@ -59,7 +59,7 @@ export default function DownloadCSV({ collection }: { collection: Collection }) 
             .download(`${user.id}/${collection.folder}/${file_name}`)
           if (error) {
             toast({
-              title: "Something went wrong! 😢",
+              title: "Something went wrong! Try again.😢",
               variant: "destructive"
             })
             console.error(error)
