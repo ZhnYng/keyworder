@@ -46,9 +46,22 @@ export async function login(prevState: State, formData: FormData) {
           password: ['Password may be incorrect'],
         },
       }
+    } else if (error.message === "Email not confirmed") {
+      return {
+        errors: {
+          email: ['Email not confirmed'],
+        },
+      }
+    } else {
+      return {
+        errors: {
+          email: ['An error occurred'],
+          password: ['An error occurred'],
+        }
+      }
     }
-  }
-
+  } 
+  
   revalidatePath('/', 'layout')
   redirect('/')
 }

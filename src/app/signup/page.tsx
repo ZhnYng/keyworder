@@ -9,6 +9,7 @@ import { Loader2, WholeWord } from "lucide-react"
 import React from "react"
 import { signup } from "./actions"
 import { useFormState } from "react-dom"
+import { toast } from "@/components/ui/use-toast"
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
@@ -25,11 +26,16 @@ export default function Page() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Welcome!</CardTitle>
-          <CardDescription>Enter your email and password to sign up.</CardDescription>
+          <CardDescription>Enter a valid email and password to sign up.</CardDescription>
         </CardHeader>
         <form action={
           async (formData: FormData) => {
-            startTransition(() => action(formData));
+            startTransition(() => {
+              action(formData)
+              toast({
+                title: "Check your inbox to verify your account.",
+              })
+            });
           }
         }>
           <CardContent className="space-y-4">

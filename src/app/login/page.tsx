@@ -37,7 +37,7 @@ export default function Page() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" name="email" placeholder="email@example.com" required />
-              {state.errors?.email && <div className="text-sm text-red-500">{state.errors.email.join(", ")}</div>}
+              {state.errors?.email && <div className="text-sm font-medium text-red-500">{state.errors.email.join(", ")}</div>}
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -47,7 +47,7 @@ export default function Page() {
                 </Link>
               </div>
               <Input id="password" name="password" type="password" required />
-              {state.errors?.password && <div className="text-sm text-red-500">{state.errors.password.join(", ")}</div>}
+              {state.errors?.password && <div className="text-sm font-medium text-red-500">{state.errors.password.join(", ")}</div>}
             </div>
           </CardContent>
           <CardFooter>
