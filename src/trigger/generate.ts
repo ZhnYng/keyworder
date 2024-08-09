@@ -1,5 +1,12 @@
+import { configure } from "@trigger.dev/sdk/v3";
 import { logger, task, wait } from "@trigger.dev/sdk/v3";
 import OpenAI from "openai";
+
+if (process.env.NODE_ENV === "production") {
+  configure({
+    secretKey: process.env.TRIGGER_SECRET_KEY,
+  });
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

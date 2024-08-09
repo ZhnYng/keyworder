@@ -25,7 +25,7 @@ export default function Page({
         <div className="mx-auto space-y-8">
           <h1 className="text-2xl font-bold mb-4">Billing</h1>
           <div className="space-y-2">
-            <h1 className="text-lg">Focus on photography and leave the menial jobs to us.</h1>
+            <h1 className="text-lg mb-1">Focus on photography and leave the menial jobs to us.</h1>
             <p className="text-muted-foreground">Fill in your preferred transaction method.</p>
           </div>
         </div>
