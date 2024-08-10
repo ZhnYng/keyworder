@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 }
 
 const updateSubscriptionStatus = async (customerId: string, status: string) => {
-  console.log(status)
+  console.log("UPDATING STATUS", status);
   const { error: updateError } = await supabase
     .from("customers")
     .update({
