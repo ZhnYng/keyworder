@@ -9,7 +9,7 @@ import { Loader2, WholeWord } from "lucide-react";
 import { z } from "zod";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const passwordSchema = z.object({
   password: z.string().min(8),
@@ -19,8 +19,19 @@ export default function Page() {
   const [isPending, startTransition] = React.useTransition()
   const [password, setPassword] = React.useState<string>()
   const [errors, setErrors] = React.useState<string[]>()
+  const router = useRouter();
 
   const supabase = createClient()
+
+  React.useEffect(() => {
+    const getUser = async () => {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (user) {
+        router.push("/");
+      }
+    }
+    getUser();
+  }, [])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

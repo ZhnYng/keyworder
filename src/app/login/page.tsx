@@ -10,10 +10,24 @@ import { login } from "./actions"
 import React from "react"
 import { useFormState } from "react-dom"
 import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
   const [state, action] = useFormState(login, { errors: {} })
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const supabase = createClient();
+    
+    const getUser = async () => {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (user) {
+        router.push("/");
+      }
+    }
+    getUser();
+  }, [])
 
   return (
     <div className="flex h-full flex-col items-center justify-center bg-background">
@@ -52,7 +66,7 @@ export default function Page() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              {isPending ? <Loader2 className="animate-spin"/> : "Sign in"}
+              {isPending ? <Loader2 className="animate-spin" /> : "Sign in"}
             </Button>
           </CardFooter>
         </form>

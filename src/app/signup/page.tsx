@@ -10,10 +10,25 @@ import React from "react"
 import { signup } from "./actions"
 import { useFormState } from "react-dom"
 import { toast } from "@/components/ui/use-toast"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
   const [state, action] = useFormState(signup, { errors: {} })
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const supabase = createClient();
+    
+    const getUser = async () => {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (user) {
+        router.push("/");
+      }
+    }
+    getUser();
+  }, [])
 
   return (
     <div className="flex h-full flex-col items-center justify-center bg-background">

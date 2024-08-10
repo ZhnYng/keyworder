@@ -10,13 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Loader2, WholeWord } from "lucide-react";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
+import { createClient } from "@/utils/supabase/client";
+import { redirect, useRouter } from "next/navigation";
 
 export default function Page() {
   const [isPending, startTransition] = React.useTransition();
   const [state, action] = useFormState(sendPasswordResetEmail, { errors: {} })
+  const router = useRouter();
 
   React.useEffect(() => {
-    console.log(Boolean(state.errors == null))
     if (state.errors === null) {
       console.log("HERE")
       toast({
@@ -24,6 +26,15 @@ export default function Page() {
         description: "Check your inbox for a password reset link."
       })
     }
+
+    const supabase = createClient();
+    const getUser = async () => {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (user) {
+        router.push("/");
+      }
+    }
+    getUser();
   }, [state])
 
   return (
