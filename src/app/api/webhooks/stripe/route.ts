@@ -31,6 +31,7 @@ export async function POST(req: Request) {
 
     if (event.type === "customer.subscription.updated") {
       const customerId = event.data.object.customer;
+      console.log(event.data.object.status.toUpperCase())
       updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
     }
     if (event.type === "customer.subscription.paused") {
