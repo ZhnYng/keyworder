@@ -84,7 +84,7 @@ export async function createSubscription() {
       customer: data?.stripe_customer_id,
       items: [
         {
-          price: "price_1PhghOCPvTaRk10FFbfOEqFt",
+          price: process.env.NODE_ENV === "production" ? "price_1PmEkrCPvTaRk10FrfQW5Qsn" : "price_1PhghOCPvTaRk10FFbfOEqFt",
         },
       ],
       expand: ["pending_setup_intent"],
