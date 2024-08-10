@@ -22,7 +22,7 @@ export default function Page({
           clientSecret: params.secret,
         }}
       >
-        <div className="mx-auto space-y-8">
+        <div className="mx-auto space-y-8 mb-2">
           <h1 className="text-2xl font-bold mb-4">Billing</h1>
           <div className="space-y-2">
             <h1 className="text-lg mb-1">Focus on photography and leave the menial jobs to us.</h1>
@@ -67,7 +67,7 @@ const SetupForm = () => {
     <form onSubmit={(event) => startTransition(() => handleSubmit(event))} className="space-y-4">
       <PaymentElement />
       {errorMessage &&
-        <p className="mt-2 text-sm text-red-500" key={errorMessage}>
+        <p className="mt-2 text-sm font-medium text-red-500" key={errorMessage}>
           {errorMessage}
         </p>
       }
