@@ -31,15 +31,15 @@ export async function POST(req: Request) {
 
     if (event.type === "customer.subscription.updated") {
       const customerId = event.data.object.customer;
-      updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
+      await updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
     }
     if (event.type === "customer.subscription.paused") {
       const customerId = event.data.object.customer;
-      updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
+      await updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
     }
     if (event.type === "customer.subscription.resumed") {
       const customerId = event.data.object.customer;
-      updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
+      await updateSubscriptionStatus(customerId, event.data.object.status.toUpperCase());
     }
 
     return Response.json({ result: event, ok: true });
