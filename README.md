@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# **Keyworder: AI-Powered Keyword Generator for Stock Images**  
+Keyworder streamlines the process of generating optimized keywords, titles, and descriptions for stock images, improving visibility on stock platforms and helping photographers focus on creativity.
 
-## Getting Started
+## **🌟 Features**
 
-First, run the development server:
+- **AI-Generated Keywords:** Utilizes OpenAI’s models to generate optimized keywords.
+- **CSV Export:** Supports export for Adobe Stock uploads.
+- **Pay-As-You-Go Pricing:** Accessible for all levels.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## **🚀 Try It Out**  
+Try keyworder [here!](https://keyworder-landing.vercel.app/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## **🛠️ Architecture**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **OpenAI (O4-mini)** powers the keyword generation, interfacing with **Trigger.dev** for long-running tasks.
+- **Trigger.dev** handles long-running functions and writes the results to **PostgreSQL**.
+- The **web application** interacts with the database, fetching generated keywords, titles, and descriptions.
+- Image assets are stored in **AWS S3**.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![Architecture Diagram](https://github.com/user-attachments/assets/1f1ac9e2-b0b0-464a-9a73-4474017fa094)
 
-## Learn More
+## **🔧 Tech Stack**
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| **Category**    | **Technology**         |
+|-----------------|------------------------|
+| **Frontend**    | Next.js, TailwindCSS    |
+| **Backend**     | Node.js, Prisma         |
+| **Database**    | PostgreSQL              |
+| **Deployment**  | Vercel                  |
+| **Storage**     | AWS S3                  |
+| **AI**          | OpenAI API (O4-mini)    |
+| **Job Queue**   | Trigger.dev             |
