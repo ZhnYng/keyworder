@@ -32,13 +32,11 @@ export default async function RootLayout({
           raleway.className
         )}
       >
-        <div className="flex w-full min-h-screen">
-          {user && <div className="w-64">
+        <div className="flex w-full min-h-screen flex-col sm:flex-row">
+          {user && <div className="sm:w-64 w-0 z-50">
             <Sidebar />
           </div>}
-          <div className="flex flex-col w-full min-h-screen flex-1">
-            <header className="flex items-center p-4 justify-end">
-            </header>
+          <div className="flex flex-col w-full min-h-screen flex-1 sm:py-4">
             {children}
           </div>
         </div>

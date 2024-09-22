@@ -31,7 +31,7 @@ export default function Page() {
   }, [])
 
   return (
-    <div className="flex h-full flex-col items-center justify-center bg-background">
+    <div className="flex h-full flex-col items-center justify-center bg-background p-6">
       <header className="mb-8 flex w-full max-w-md items-center justify-center">
         <Link href="#" prefetch={false} className="flex gap-1 items-center">
           <WholeWord className="h-8 w-8" />
